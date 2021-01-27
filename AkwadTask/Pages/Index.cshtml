@@ -1,0 +1,72 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+@using AkwadTask.Data
+@using Kendo.Mvc.UI
+@using System.Collections
+
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@Html.AntiForgeryToken()
+
+@(Html.Kendo().Grid<EmployeeViewModel>
+    ().Name("employees")
+    .Groupable()
+    .Sortable()
+    .Editable(ed => ed.Mode(GridEditMode.PopUp).TemplateName("Employee"))
+    .Scrollable()
+    .ToolBar(x => x.Create())
+    .Columns(columns =>
+    {
+        columns.Bound(column => column.EMPLOYEE_DATA_ID);
+        columns.Bound(column => column.FIRST_NAME);
+        columns.Bound(column => column.LAST_NAME);
+        columns.Bound(column => column.DEPARTMENT_NAME);
+        columns.Bound(column => column.JOB_NAME);
+        columns.Bound(column => column.EMPLOYEE_ADDRESS);
+        columns.Bound(column => column.EMPLOYEE_MOBILE);
+        columns.Bound(column => column.SALARY);
+        columns.Bound(column => column.HIREING_DATE);
+        columns.Command(column =>
+        {
+            column.Edit();
+            column.Destroy();
+        }).Width(230);
+    })
+    .DataSource(ds => ds.Ajax()
+        .Read(r => r.Url("/Index?handler=Read").Data("forgeryToken"))
+        .Update(u => u.Url("/Index?handler=Update").Data("forgeryToken"))
+        .Create(c => c.Url("/Index?handler=Create").Data("forgeryToken"))
+        .Destroy(d => d.Url("/Index?handler=Destroy").Data("forgeryToken"))
+        .Model(m => m.Id(id => id.EMPLOYEE_DATA_ID))
+        .PageSize(10)
+    )
+    .Pageable())
+
+<script>
+    function forgeryToken() {
+        return kendo.antiForgeryTokens();
+    }
+    
+    function onCascade() {
+        $("#JOB_ID").data("kendoDropDownList").dataSource.read();
+    }
+    function filterJobs() {
+        return {
+            __RequestVerificationToken: kendo.antiForgeryTokens().__RequestVerificationToken,
+            dep: $("#DEPARTMENT_ID").val()
+        };
+    }
+
+    function save() {
+        var grid = $("#employees").data("kendoGrid");
+        grid.dataSource.read();
+    }
+
+    function saveChanges() {
+        var grid = $("#employees").data("kendoGrid");
+        grid.dataSource.read();
+    }
+</script>

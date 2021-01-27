@@ -1,0 +1,6 @@
+﻿@using System.Collections
+@model decimal
+           
+@(
+    Html.Kendo().DropDownList().Name("departments").DataValueField("DEPARTMENT_ID").DataTextField("DEPARTMENT_NAME").BindTo((IEnumerable)ViewData["departments"])
+)

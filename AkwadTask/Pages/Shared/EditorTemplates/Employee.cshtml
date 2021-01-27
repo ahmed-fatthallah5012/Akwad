@@ -1,0 +1,96 @@
+﻿@using System.Collections
+@model AkwadTask.Data.EmployeeViewModel
+
+<div class="k-edit-form-container">
+    <h3>بيانات الموظف</h3>
+    <br />
+    @Html.HiddenFor(model => model.EMPLOYEE_DATA_ID)
+
+    <div class="k-edit-label">
+        @Html.LabelFor(model => model.FIRST_NAME)
+    </div>
+    <div class="k-edit-field">
+        @Html.EditorFor(model => model.FIRST_NAME)
+        @Html.ValidationMessageFor(model => model.FIRST_NAME)
+    </div>
+
+    <div class="k-edit-label">
+        @Html.LabelFor(model => model.LAST_NAME)
+    </div>
+    <div class="k-edit-field">
+        @Html.EditorFor(model => model.LAST_NAME)
+        @Html.ValidationMessageFor(model => model.LAST_NAME)
+    </div>
+
+    <div class="k-edit-label">
+        @Html.LabelFor(model => model.DEPARTMENT_ID)
+    </div>
+    <div class="k-edit-field">
+        @(
+            Html.Kendo().DropDownListFor(m => m.DEPARTMENT_ID)
+                .DataValueField("DEPARTMENT_ID").DataTextField("DEPARTMENT_NAME")
+                .DataSource(ds=>ds.Custom()
+                    .Transport(t=>t.
+                        Read(r=>r.Url("/Index?handler=Departments")
+                            .Data("forgeryToken")))
+                    .ServerFiltering(true)).Events(e=>e.Cascade("onCascade"))
+        )
+        @Html.ValidationMessageFor(model => model.DEPARTMENT_ID)
+    </div>
+
+    <div class="k-edit-label">
+        @Html.LabelFor(model => model.JOB_ID)
+    </div>
+    <div class="k-edit-field">
+        @(
+            Html.Kendo().DropDownListFor(m => m.JOB_ID)
+                .DataValueField("JOB_ID").DataTextField("JOB_NAME")
+                .DataSource(ds=>ds.Custom()
+                    .Transport(t=>
+                        t.Read(r=>r.Url("/Index?handler=Jobs")
+                            .Data("filterJobs")))
+                    .ServerFiltering(true))
+        )
+        @Html.ValidationMessageFor(model => model.JOB_ID)
+    </div>
+
+    <div class="k-edit-label">
+        @Html.LabelFor(model => model.EMPLOYEE_ADDRESS)
+    </div>
+    <div class="k-edit-field">
+        @Html.EditorFor(model => model.EMPLOYEE_ADDRESS)
+        @Html.ValidationMessageFor(model => model.EMPLOYEE_ADDRESS)
+    </div>
+
+    <div class="k-edit-label">
+        @Html.LabelFor(model => model.EMPLOYEE_MOBILE)
+    </div>
+    <div class="k-edit-field">
+        @Html.EditorFor(model => model.EMPLOYEE_MOBILE)
+        @Html.ValidationMessageFor(model => model.EMPLOYEE_MOBILE)
+    </div>
+
+    <div class="k-edit-label">
+        @Html.LabelFor(model => model.IDNUMBER)
+    </div>
+    <div class="k-edit-field">
+        @Html.Kendo().NumericTextBoxFor(model => model.IDNUMBER)
+        @Html.ValidationMessageFor(model => model.IDNUMBER)
+    </div>
+
+    <div class="k-edit-label">
+        @Html.LabelFor(model => model.SALARY)
+    </div>
+    <div class="k-edit-field">
+        @Html.Kendo().NumericTextBoxFor(model => model.SALARY)
+        @Html.ValidationMessageFor(model => model.SALARY)
+    </div>
+
+    <div class="k-edit-label">
+        @Html.LabelFor(model => model.HIREING_DATE)
+    </div>
+    <div class="k-edit-field">
+        @Html.Kendo().DatePickerFor(model => model.HIREING_DATE)
+        @Html.ValidationMessageFor(model => model.HIREING_DATE)
+    </div>
+</div>
